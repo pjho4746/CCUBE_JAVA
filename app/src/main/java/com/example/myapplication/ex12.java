@@ -63,7 +63,7 @@ public class ex12 extends AppCompatActivity implements View.OnClickListener {
                 txt.append(button[i].getText().toString());
             }
         }
-        
+
         if (button[14] == v) {
             String expression = txt.getText().toString();
             if (expression.contains("+")) {
