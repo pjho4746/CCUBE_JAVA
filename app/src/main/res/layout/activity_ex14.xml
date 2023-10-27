@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ex14">
+
+    <Button
+        android:id="@+id/ex14_button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="알림 창" />
+
+    <Button
+        android:id="@+id/ex14_button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="목록 알림 창" />
+
+    <Button
+        android:id="@+id/ex14_button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="날짜 선택 창" />
+
+    <Button
+        android:id="@+id/ex14_button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="시간 선택 창" />
+
+</LinearLayout>
