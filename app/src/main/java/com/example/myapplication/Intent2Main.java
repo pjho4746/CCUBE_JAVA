@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
@@ -25,6 +26,7 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
     ImageView resultImageView;
 
     Button speechBtn; // 구글 음성음식 버튼
+    Button mapBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,13 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
         cameraDataBtn = findViewById(R.id.btn_camera_data);
         resultImageView = findViewById(R.id.resultImageView);
         speechBtn = findViewById(R.id.btn_speech);
+        mapBtn = findViewById(R.id.btn_map);
 
         // 버튼에 클릭 리스너를 등록합니다.
         contactsBtn.setOnClickListener(this);
         cameraDataBtn.setOnClickListener(this);  // 카메라 앱 버튼에 클릭 리스너를 추가합니다.
         speechBtn.setOnClickListener(this);
+        mapBtn.setOnClickListener(this);
     }
 
     @Override
@@ -65,6 +69,10 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "음성인식 테스트");
             startActivityForResult(intent, 50);
+        }
+        else if(v==mapBtn){
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:37.5535, 126.9698"));
+            startActivity(intent);
         }
     }
 
