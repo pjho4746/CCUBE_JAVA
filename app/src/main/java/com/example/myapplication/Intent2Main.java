@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,8 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
     Button speechBtn; // 구글 음성음식 버튼
     Button mapBtn;
 
+    Button browserBtn; // 웹브라우저 버튼
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +43,14 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
         resultImageView = findViewById(R.id.resultImageView);
         speechBtn = findViewById(R.id.btn_speech);
         mapBtn = findViewById(R.id.btn_map);
+        browserBtn = findViewById(R.id.btn_browser);
 
         // 버튼에 클릭 리스너를 등록합니다.
         contactsBtn.setOnClickListener(this);
         cameraDataBtn.setOnClickListener(this);  // 카메라 앱 버튼에 클릭 리스너를 추가합니다.
         speechBtn.setOnClickListener(this);
         mapBtn.setOnClickListener(this);
+        browserBtn.setOnClickListener(this);
     }
 
     @Override
@@ -74,6 +79,21 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:37.5535, 126.9698"));
             startActivity(intent);
         }
+        else if (v == browserBtn) {
+            Uri webpage = Uri.parse("https://www.c3coding.com/");
+            Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+
+            // 웹브라우저를 여는데 사용될 앱이 없을 경우 예외를 방지하기 위해 resolveActivity를 사용합니다.
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+            // 웹브라우저를 여는데 사용될 앱이 없을 경우
+            else {
+                // Toast 메시지를 통해 사용자에게 알립니다.
+                Toast.makeText(this, "웹브라우저 앱이 설치되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
     @Override
