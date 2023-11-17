@@ -2,8 +2,11 @@ package com.example.myapplication;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import android.Manifest;
 
 public class Intent2Main extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,6 +34,7 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
     Button mapBtn;
 
     Button browserBtn; // 웹브라우저 버튼
+    Button callBtn; //전화 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
         speechBtn = findViewById(R.id.btn_speech);
         mapBtn = findViewById(R.id.btn_map);
         browserBtn = findViewById(R.id.btn_browser);
+        callBtn = findViewById(R.id.btn_call);
 
         // 버튼에 클릭 리스너를 등록합니다.
         contactsBtn.setOnClickListener(this);
@@ -51,6 +57,7 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
         speechBtn.setOnClickListener(this);
         mapBtn.setOnClickListener(this);
         browserBtn.setOnClickListener(this);
+        callBtn.setOnClickListener(this);
     }
 
     @Override
@@ -93,7 +100,18 @@ public class Intent2Main extends AppCompatActivity implements View.OnClickListen
                 Toast.makeText(this, "웹브라우저 앱이 설치되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
             }
         }
-
+        else if (v == callBtn) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 있는 경우
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:02-120"));
+                startActivity(intent);
+            } else {
+                // 앱 내 전화 허용 퍼미션 요청
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},
+                        100);
+            }
+        }
     }
 
     @Override

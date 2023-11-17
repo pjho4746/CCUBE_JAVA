@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
 
     <application
         android:allowBackup="true"
@@ -70,24 +74,6 @@
         </activity>
         <activity
             android:name=".ex12"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ex10"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ex1"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
