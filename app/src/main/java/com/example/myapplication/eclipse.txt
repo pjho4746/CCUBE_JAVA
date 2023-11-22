@@ -1,0 +1,49 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class SimpleChatServer {
+    public static void main(String[] args) {
+        try {
+            ServerSocket serverSocket = new ServerSocket(12348);
+
+            System.out.println("서버는 클라이언트를 기다리고 있습니다...");
+
+            Socket clientSocket = serverSocket.accept(); // 클라이언트 연결 대기
+
+            System.out.println("클라이언트가 연결되었습니다.");
+
+            // 클라이언트로부터 메시지를 받는 스레드 시작
+            new Thread(() -> {
+                try {
+                    Scanner scanner = new Scanner(clientSocket.getInputStream());
+                    while (scanner.hasNextLine()) {
+                        String message = scanner.nextLine();
+                        System.out.println("클라이언트: " + message);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+            // 서버에서 메시지를 전송하는 부분을 위한 스레드
+            new Thread(() -> {
+                try {
+                    PrintWriter serverWriter = new PrintWriter(clientSocket.getOutputStream(), true);
+                    Scanner consoleScanner = new Scanner(System.in);
+                    while (true) {
+                        String serverMessage = consoleScanner.nextLine();
+                        serverWriter.println(serverMessage);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
