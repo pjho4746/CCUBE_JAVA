@@ -13,10 +13,16 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
+
 public class Message extends AppCompatActivity {
     private EditText messageEditText;
     private LinearLayout messageContainer;
     private ScrollView scrollView;
+    private PrintWriter clientWriter; // 클라이언트에서 서버로 메시지를 보내기 위한 PrintWriter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +40,49 @@ public class Message extends AppCompatActivity {
                 sendMessage();
             }
         });
+
+        // 클라이언트 소켓 초기화 및 서버에 연결
+        initClientSocket();
+    }
+
+    private void initClientSocket() {
+        new Thread(() -> {
+            try {
+                Socket socket = new Socket("192.168.10.1", 12345);
+                clientWriter = new PrintWriter(socket.getOutputStream(), true);
+
+                // 서버로부터 메시지를 받는 스레드 시작
+                Scanner scanner = new Scanner(socket.getInputStream());
+                while (scanner.hasNextLine()) {
+                    String message = scanner.nextLine();
+                    // 서버에서 받은 메시지를 화면에 표시
+                    runOnUiThread(() -> displayMessage("Server: " + message));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void sendMessage() {
         String message = messageEditText.getText().toString();
 
-        if (!TextUtils.isEmpty(message)) {
-            // 메시지를 보냄
-            logMessage("Sent: " + message);
+        if (clientWriter != null) {
+            if (!TextUtils.isEmpty(message)) {
+                // 메시지를 보내기
+                clientWriter.println(message);
+                clientWriter.flush(); // 버퍼를 비워주는 부분 추가
 
-            // 메시지를 화면에 표시
-            displayMessage(message);
+                // 메시지를 화면에 표시
+                displayMessage("Sent: " + message);
 
-            // 입력창 비우기
-            messageEditText.getText().clear();
+                // 입력창 비우기
+                messageEditText.getText().clear();
+            } else {
+                logMessage("Message is empty");
+            }
         } else {
-            logMessage("Message is empty");
+            logMessage("clientWriter is null");
         }
     }
 
